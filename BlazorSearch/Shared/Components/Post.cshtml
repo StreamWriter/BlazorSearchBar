@@ -1,0 +1,12 @@
+﻿<div style="background-color:#b1afaf">
+    <h3>@Title</h3>
+    <p>@ChildContent</p>
+</div>
+
+@functions {
+[Parameter]
+private string Title { get; set; }
+
+[Parameter]
+private RenderFragment ChildContent { get; set; }
+}

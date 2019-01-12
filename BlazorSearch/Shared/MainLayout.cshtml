@@ -1,0 +1,29 @@
+@inherits BlazorLayoutComponent
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+        <input type="search" bind-value-oninput="@SearchTerm" onkeydown="@((e) => SearchKeyDown(e))" placeholder="Search..." />
+    </div>
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+@functions {
+private string SearchTerm { get; set; }
+
+private void SearchKeyDown(UIKeyboardEventArgs e)
+{
+    if (e.Key == "Enter")
+    {
+        this.StateHasChanged();
+        UriHelper.NavigateTo($"/search/{SearchTerm}");
+    }
+}
+}

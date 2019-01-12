@@ -1,0 +1,15 @@
+﻿@page "/search/{SearchTerm}"
+
+<p>Searching for `@SearchTerm`</p>
+<Feed Filter="@SearchTerm" />
+
+@functions {
+    protected override void OnParametersSet()
+    {
+        this.StateHasChanged();
+    }
+
+    [Parameter]
+    private string SearchTerm { get; set; }
+
+}

@@ -1,0 +1,59 @@
+﻿@inject HttpClient  Http
+
+<div>
+    @if (posts == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        foreach (var post in posts)
+        {
+            <Post Title="@post.Title">
+                @post.Content
+            </Post>
+        }
+    }
+</div>
+
+@functions {
+
+[Parameter]
+private string Filter { get; set; }
+
+IEnumerable<FeedElement> posts;
+
+protected override async Task OnInitAsync()
+{
+    await Load();
+}
+
+protected override async void OnParametersSet()
+{
+    await Load();
+    this.StateHasChanged();
+}
+
+private async Task Load()
+{
+    posts = await GetData();
+    if (!string.IsNullOrEmpty(Filter))
+    {
+        string filter = Filter.ToLower();
+        posts = posts.Where(p => p.Title.ToLower().Contains(filter) || p.Content.ToLower().Contains(filter));
+    }
+}
+
+private async Task<IEnumerable<FeedElement>> GetData()
+{
+    var data = await Http.GetJsonAsync<IEnumerable<FeedElement>>("sample-data/feed.json");
+    return data;
+}
+
+public class FeedElement
+{
+    public string Title { get; set; }
+    public string Content { get; set; }
+}
+
+}
